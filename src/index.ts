@@ -27,7 +27,11 @@ dotenv.config();
  */
 const app: Express = express();
 const port = process.env.PORT || 3000;
-app.use(cors());
+app.use(cors({
+  origin: 'http://44.235.84.229:3000',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  credentials: true,
+}));
 app.use(traceMiddleware);
 app.use(errorHandlerMiddleware);
 app.use(logRequest);
