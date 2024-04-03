@@ -22,7 +22,7 @@ export const AppDataSource = new DataSource({
   host: 'postgresql_server',
   port: Number('5432'),
   username: 'postgres',
-  password: 'admin123',
+  password: 'admin@123',
   synchronize: sync,
   logging: false,
   entities: ['src/orm/entities/**/*{.ts,.js}'],
