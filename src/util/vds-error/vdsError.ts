@@ -13,7 +13,7 @@ export class VdsError extends Error {
     message: string,
     errors: string[] | null = null,
     errorRaw: any = null,
-    errorsValidation: ErrorValidation[] | null = null,
+    errorsValidation: ErrorValidation[] | null = null
   ) {
     super(message);
 
@@ -30,14 +30,14 @@ export class VdsError extends Error {
     return this.httpStatusCode;
   }
 
-  get JSON(): ErrorResponse {
+  get ErrorResponse(): ErrorResponse {
     return {
       errorType: this.errorType,
       errorMessage: this.message,
       errors: this.errors,
       errorRaw: this.errorRaw,
       errorsValidation: this.errorsValidation,
-      stack: this.stack,
+      stack: this.stack
     };
   }
 }

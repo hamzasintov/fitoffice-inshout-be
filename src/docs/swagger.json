@@ -1,170 +1,754 @@
 {
-    "openapi":"3.0.3",
-    "info":{
-       "title":"Fit Office APIs",
-       "version":"0.0.1",
-       "description":"Fit office APIs to support the frontend"
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Fit Office APIs",
+    "version": "0.0.1",
+    "description": "Fit office APIs to support the frontend"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Onboarding",
+      "description": "Fit office user onboarding"
     },
-    "servers":[
-       {
-          "url":"http://localhost:3000/"
-       }
-    ],
-    "tags":[
-       {
-          "name":"Onboarding",
-          "description":"Fit office user onboarding"
-       }
-    ],
-    "paths":{
-       "/users/register":{
-          "post":{
-             "tags":[
-                "Onboarding"
-             ],
-             "summary":"Saves the user in the database",
-             "requestBody":{
-                "description":"Create a new user with role",
-                "content":{
-                   "application/json":{
-                      "schema":{
-                         "$ref":"#/components/schemas/RegisterUser"
-                      }
-                   }
-                },
-                "required":true
-             },
-             "responses":{
-                "200":{
-                   "description":"Returns newly created user",
-                   "content":{
-                      "application/json":{
-                         "schema":{
-                            "$ref":"#/components/schemas/RegisterUserResponse"
-                         }
-                      }
-                   }
+    {
+      "name": "Packages",
+      "description": "Manage the Packages"
+    }
+  ],
+  "paths": {
+    "/users/register": {
+      "post": {
+        "tags": ["Onboarding"],
+        "summary": "Saves the user in the database",
+        "requestBody": {
+          "description": "Create a new user with role",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterUserRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Returns newly created user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegisterUserResponse"
                 }
-             }
+              }
+            }
           }
-       },
-       "/users/login": {
-         "post": {
-           "tags": [
-             "Onboarding"
-           ],
-           "summary": "Logs in the user",
-           "requestBody": {
-             "description": "Login with email and password",
-             "required": true,
-             "content": {
-               "application/json": {
-                 "schema": {
-                   "$ref": "#/components/schemas/LoginUser"
-                 }
-               }
-             }
-           },
-           "responses": {
-             "200": {
-               "description": "Returns user information",
-               "content": {
-                 "application/json": {
-                   "schema": {
-                     "$ref": "#/components/schemas/LoginUserResponse"
-                   }
-                 }
-               }
-             }
-           }
-         }
-       }
+        }
+      }
     },
-    "components":{
-       "schemas":{
-          "RegisterUser":{
-             "type":"object",
-             "properties":{
-                "email": {
-                   "type":"string"
-                },
-                "password": {
-                   "type":"string"
-                },
-                "role": {
-                   "type":"integer",
-                   "minimum":1,
-                   "maximum":4
-                },
-                "name": {
-                    "type":"string"
-                }             
-            },
-             "required":[
-              "email",
-              "password"
-             ]
+    "/users/login": {
+      "post": {
+        "tags": ["Onboarding"],
+        "summary": "Logs in the user",
+        "requestBody": {
+          "description": "Login with email and password",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginUserRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns user information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginUserResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/profile": {
+      "get": {
+        "tags": ["Onboarding"],
+        "summary": "Returns user profile information",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns user information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserProfileResponse"
+                }
+              }
+            }
           },
-          "RegisterUserResponse":{
-             "type":"object",
-             "properties":{
-                "email": {
-                    "type":"string"
-                 },
-                 "password": {
-                    "type":"string"
-                 },
-                 "role": {
-                    "type":"integer",
-                    "minimum":1,
-                    "maximum":4
-                 },
-                 "name": {
-                     "type":"string"
-                 }             
-             },
-             "required":[ ]
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/users/forgotPassword": {
+      "post": {
+        "tags": ["Onboarding"],
+        "summary": "Initiates the forgot password process",
+        "requestBody": {
+          "description": "Email to send password reset instructions",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForgotPasswordRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password reset instructions sent successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForgotPasswordResponse"
+                }
+              }
+            }
           },
-          "LoginUser": {
+          "400": {
+            "description": "Invalid email format"
+          },
+          "404": {
+            "description": "Email not found"
+          }
+        }
+      }
+    },
+    "/users/resetPassword": {
+      "post": {
+        "tags": ["Onboarding"],
+        "summary": "Initiates the password reset process",
+        "requestBody": {
+          "description": "Updated password and valid reset token to reset password in system",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPasswordRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password reset instructions sent successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResetPasswordResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid password or token"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+    "/packages/add": {
+      "post": {
+        "tags": ["Packages"],
+        "summary": "Saves the package in the database",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "Insert new row in packages tables",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestAddPackage"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Returns newly created package",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseAddPackage"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/packages/delete": {
+      "delete": {
+        "tags": ["Packages"],
+        "summary": "Delete a package from database",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "Delete the package by using the Id",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestDeletePackage"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Soft deletes the package",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseDeletePackage"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/packages/all": {
+      "get": {
+        "tags": ["Packages"],
+        "summary": "Get packages with pagination",
+        "description": "Retrieve per page packages with",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Number of packages per page",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns all packages",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "page": {
+                      "type": "integer",
+                      "description": "Current page number"
+                    },
+                    "limit": {
+                      "type": "integer",
+                      "description": "Number of packages per page"
+                    },
+                    "total": {
+                      "type": "integer",
+                      "description": "Total number of packages"
+                    },
+                    "totalPages": {
+                      "type": "integer",
+                      "description": "Total number of pages"
+                    },
+                    "packages": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Packages"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/packages/update": {
+      "patch": {
+        "tags": ["Packages"],
+        "summary": "Update the packages in databse",
+        "description": "Update the on or multiple packages at once",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestUpdatePackage"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully updated packages",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseUpdatePackage"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "RegisterUserRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "role": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 4
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": ["email", "password"]
+      },
+      "RegisterUserResponse": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "role": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 4
+          },
+          "accessToken": {
+            "type": "string"
+          }
+        },
+        "required": []
+      },
+      "LoginUserRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "required": ["email", "password"]
+      },
+      "LoginUserResponse": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "role": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 4
+          },
+          "accessToken": {
+            "type": "string"
+          }
+        },
+        "required": []
+      },
+      "ForgotPasswordRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          }
+        },
+        "required": ["email"]
+      },
+      "ForgotPasswordResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": ["message"]
+      },
+      "ResetPasswordRequest": {
+        "type": "object",
+        "properties": {
+          "newPassword": {
+            "type": "string"
+          },
+          "resetToken": {
+            "type": "string"
+          }
+        },
+        "required": ["updatedPassword", "resetToken"]
+      },
+      "ResetPasswordResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": ["message"]
+      },
+      "UserProfileResponse": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "role": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 4
+          },
+          "accessToken": {
+            "type": "string"
+          }
+        },
+        "required": []
+      },
+      "RequestAddPackage": {
+        "type": "object",
+        "properties": {
+          "newPackage": {
             "type": "object",
             "properties": {
-              "email": {
+              "trackingNumber": {
                 "type": "string"
               },
-              "password": {
+              "carrier": {
                 "type": "string"
+              },
+              "status": {
+                "type": "string"
+              },
+              "condition": {
+                "type": "string"
+              },
+              "sender": {
+                "type": "string"
+              },
+              "recipientName": {
+                "type": "string"
+              },
+              "comment": {
+                "type": "string"
+              },
+              "urgent": {
+                "type": "integer"
               }
             },
             "required": [
-              "email",
-              "password"
+              "trackingNumber",
+              "carrier",
+              "status",
+              "condition",
+              "sender",
+              "recipientName",
+              "comment",
+              "urgent"
             ]
-          },
-          "LoginUserResponse": {
+          }
+        },
+        "required": ["newPackage"]
+      },
+      "ResponseAddPackage": {
+        "type": "object",
+        "properties": {
+          "package": {
             "type": "object",
             "properties": {
-              "email": {
+              "id": {
+                "type": "integer"
+              },
+              "trackingNumber": {
                 "type": "string"
               },
-              "role": {
-                "type": "integer",
-                "minimum": 1,
-                "maximum": 4
-              },
-              "name": {
+              "carrier": {
                 "type": "string"
               },
-              "accessToken": {
+              "status": {
                 "type": "string"
+              },
+              "condition": {
+                "type": "string"
+              },
+              "sender": {
+                "type": "string"
+              },
+              "recipientName": {
+                "type": "string"
+              },
+              "comment": {
+                "type": "string"
+              },
+              "urgent": {
+                "type": "integer"
+              },
+              "created_at": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "updated_at": {
+                "type": "string",
+                "format": "date-time"
               }
             },
             "required": [
-              "email",
-              "role",
-              "name",
-              "accessToken"
+              "trackingNumber",
+              "carrier",
+              "status",
+              "sender",
+              "recipientName",
+              "comment",
+              "urgent",
+              "condition",
+              "id",
+              "isDeleted",
+              "deletedAt",
+              "created_at",
+              "updated_at"
             ]
-         }
+          }
+        }
+      },
+      "RequestDeletePackage": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          }
+        },
+        "required": ["id"]
+      },
+      "ResponseDeletePackage": {
+        "ResponseDeletePackage": {
+          "type": "object",
+          "properties": {
+            "softDelete": {
+              "type": "object",
+              "properties": {
+                "generatedMaps": {
+                  "type": "array",
+                  "items": {}
+                },
+                "raw": {
+                  "type": "array",
+                  "items": {}
+                },
+                "affected": {
+                  "type": "integer"
+                }
+              },
+              "required": ["affected"]
+            }
+          },
+          "required": ["softDelete"]
+        }
+      },
+      "RequestUpdatePackage": {
+        "type": "object",
+        "properties": {
+          "packages": {
+            "type": "array",
+            "items": {
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "description": "Package ID"
+                },
+                "trackingNumber": {
+                  "type": "string",
+                  "description": "Tracking number"
+                },
+                "carrier": {
+                  "type": "string",
+                  "description": "Carrier"
+                },
+                "status": {
+                  "type": "string",
+                  "description": "Status"
+                },
+                "condition": {
+                  "type": "string",
+                  "description": "Condition"
+                },
+                "sender": {
+                  "type": "string",
+                  "description": "Sender"
+                },
+                "recipientName": {
+                  "type": "string",
+                  "description": "Recipient name"
+                },
+                "comment": {
+                  "type": "string",
+                  "description": "Comment"
+                },
+                "urgent": {
+                  "type": "boolean",
+                  "description": "Urgent flag"
+                }
+              }
+            }
+          }
+        }
+      },
+      "ResponseUpdatePackage": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "affected": {
+              "type": "integer"
+            }
+          }
+        }
+      },
+      "Packages": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "trackingNumber": {
+            "type": "string"
+          },
+          "carrier": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "condition": {
+            "type": "string"
+          },
+          "sender": {
+            "type": "string"
+          },
+          "recipientName": {
+            "type": "string"
+          },
+          "comment": {
+            "type": "string"
+          },
+          "urgent": {
+            "type": "integer"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "isDeleted": {
+            "type": "boolean"
+          },
+          "deletedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "trackingNumber",
+          "carrier",
+          "status",
+          "condition",
+          "sender",
+          "recipientName",
+          "comment",
+          "urgent",
+          "created_at",
+          "updated_at",
+          "isDeleted",
+          "deletedAt"
+        ]
       }
     }
   }
+}

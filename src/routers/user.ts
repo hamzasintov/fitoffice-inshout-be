@@ -1,11 +1,15 @@
-import express, { Request, Response } from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import logger from '../util/logger';
 import { getSchema, postSchema, patchSchema } from '../models/user';
 import validate from '../middleware/request_validator';
-import {login, register, profile} from '../controllers/User';
-import {verifyToken} from '../middleware/jwt';
-
-
+import {
+  login,
+  register,
+  profile,
+  forgotPassword,
+  resetPassword
+} from '../controllers/User';
+import { verifyToken } from '../middleware/jwt';
 
 export function getUsersRouter(): express.Router {
   const router = express.Router();
@@ -57,7 +61,6 @@ export function getUsersRouter(): express.Router {
   //   res.json(user);
   // });
 
-
   // DELETE a user by ID
   // router.delete('/:id', (req: Request, res: Response) => {
   //   const userIndex = users.findIndex((u) => u.id === parseInt(req.params.id));
@@ -72,5 +75,7 @@ export function getUsersRouter(): express.Router {
   router.post('/login', login);
   router.post('/register', register);
   router.get('/profile', verifyToken, profile);
+  router.post('/forgotPassword', forgotPassword);
+  router.post('/resetPassword', resetPassword);
   return router;
 }

@@ -1,38 +1,47 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn
+} from 'typeorm';
 import bycrypt from 'bcrypt';
 
 @Entity()
 export class User {
-    @PrimaryGeneratedColumn()
-    id: number;
-  
-    @Column()
-    name: string;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column({
-        unique: true
-    })
-    email: string;
+  @Column()
+  name: string;
 
-    @Column()
-    password: string;
+  @Column({
+    unique: true
+  })
+  email: string;
 
-    @Column()
-    role: number;
+  @Column()
+  password: string;
 
-    @Column()
-    @CreateDateColumn()
-    created_at: Date;
+  @Column()
+  role: number;
 
-    @Column()
-    @UpdateDateColumn()
-    updated_at: Date;
+  @Column({ nullable: true, type: 'text' })
+  resetPasswordToken: string | null;
 
-    hashPassword() {
-        this.password = bycrypt.hashSync(this.password, 0);
-    }
+  @Column()
+  @CreateDateColumn()
+  created_at: Date;
 
-    checkIfPasswordMatches(unencryptedPassword: string): boolean {
-        return bycrypt.compareSync(unencryptedPassword, this.password);        
-    }
+  @Column()
+  @UpdateDateColumn()
+  updated_at: Date;
+
+  hashPassword() {
+    this.password = bycrypt.hashSync(this.password, 0);
+  }
+
+  checkIfPasswordMatches(unencryptedPassword: string): boolean {
+    return bycrypt.compareSync(unencryptedPassword, this.password);
+  }
 }

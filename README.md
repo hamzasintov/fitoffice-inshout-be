@@ -1,4 +1,4 @@
-# TypeScript x Express x Node.js
+## TypeScript x Express x Node.js
 
 This repository contains a basic TypeScript Express application that utilizes Node.js for server-side functionality. It is configured with Nodemon for automatic server restarts during development and uses ts-node for TypeScript execution.
 
@@ -8,6 +8,21 @@ Before you begin, ensure you have the following installed on your machine:
 
 - [Node.js](https://nodejs.org/): Ensure that Node.js, preferably version 16 or higher, is installed on your system, as this project utilizes the latest versions of TypeScript and Nodemon.
 - [npm](https://www.npmjs.com/): npm is the package manager for Node.js and comes with the Node.js installation.
+
+
+## Nodemailer Configuration
+
+To set up Nodemailer with a Gmail account for sending emails, follow these steps:
+
+1. **Enable "Allow less secure apps"** in your Gmail account settings. This allows Nodemailer to access your Gmail account for sending emails.
+
+2. Create a file named `.env` in the root directory of your project if you haven't already.
+
+3. Add the following lines to your `.env` file, replacing `your.email@gmail.com` with your Gmail address and `your_gmail_password` with your Gmail password:
+
+   ```dotenv
+   NODEMAILER_AUTH_USER = "your.email@gmail.com"
+   NODEMAILER_AUTH_PASS = "your_gmail_password"
 
 ## Installation
 

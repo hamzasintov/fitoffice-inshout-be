@@ -9,7 +9,6 @@
     "sourceMap": true,
     "outDir": "./dist",
     "resolveJsonModule": true,
-    "rootDir": "./",
     "strict": false,
     "emitDecoratorMetadata": true,
     "typeRoots": ["./node_modules/@types"],
@@ -18,12 +17,14 @@
     "removeComments": true,
     "allowSyntheticDefaultImports": true,
     "baseUrl": "src/",
+    "rootDir": "./src",
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "skipDefaultLibCheck": true,
     "skipLibCheck": true,
     "experimentalDecorators": true,
+    "useDefineForClassFields": false,
   },
-  "include": ["./src/*/", "config/*"],
+  "include": ["./src/**/*.tsx", "./src/**/*.ts"],
   "exclude": ["src/tests", "./node_modules/", "./dist/", "./docs"]
 }

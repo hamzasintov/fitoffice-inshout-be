@@ -5,7 +5,6 @@ export function getStatusRouter(): express.Router {
 
   router.get('/', (_, res, next) => {
     (async () => {
-      
       res.status(200).json({ status: 'ready' });
     })();
   });

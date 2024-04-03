@@ -8,9 +8,11 @@ import logRequest from './middleware/request_logger';
 import { getUsersRouter } from './routers/user';
 import { getDataSource } from './db';
 import logger from './util/logger';
-import "reflect-metadata"
+import 'reflect-metadata';
 import swaggerUi from 'swagger-ui-express';
 import swaggerSpec from './docs/swagger.json';
+import { getPackagesRouter } from './routers/package';
+import cors from 'cors'; // Import the cors middleware
 /*
  * Load up and parse configuration details from
  * the `.env` file to the `process.env`
@@ -25,12 +27,14 @@ dotenv.config();
  */
 const app: Express = express();
 const port = process.env.PORT || 3000;
+app.use(cors());
 app.use(traceMiddleware);
 app.use(errorHandlerMiddleware);
 app.use(logRequest);
 app.use(express.json());
 app.use('/status', getStatusRouter());
 app.use('/users', getUsersRouter());
+app.use('/packages', getPackagesRouter());
 /* Define a route for the root path ("/")
  using the HTTP GET method */
 app.get('/', (req: Request, res: Response) => {
@@ -38,7 +42,6 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
 
 /* Start the Express app and listen
  for incoming requests on the specified port */
@@ -49,6 +52,6 @@ app.listen(port, async () => {
   // user.userName = "Noum";
   // repo.save(user);
 
-  logger.info('database ', db)
+  logger.info('database ', db);
   console.log(`[server]: Server is running at http://localhost:${port}`);
 });
