@@ -1,0 +1,36 @@
+version: '3.8'
+services:
+  postgresql_server:
+    image: postgres:12-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin123 
+      POSTGRES_DB: fit_office_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - db:/var/lib/postgres
+    networks:
+      - custom-bridge
+  backend:
+    container_name: backend
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    volumes:
+      - ./volume/app:/app
+      - /app/node_modules
+    restart: always
+    ports:
+      - 3000:3000
+    depends_on:
+      - postgresql_server
+    networks:
+      - custom-bridge
+
+networks:
+  custom-bridge:
+
+volumes: 
+  db:

@@ -1,0 +1,170 @@
+{
+    "openapi":"3.0.3",
+    "info":{
+       "title":"Fit Office APIs",
+       "version":"0.0.1",
+       "description":"Fit office APIs to support the frontend"
+    },
+    "servers":[
+       {
+          "url":"http://localhost:3000/"
+       }
+    ],
+    "tags":[
+       {
+          "name":"Onboarding",
+          "description":"Fit office user onboarding"
+       }
+    ],
+    "paths":{
+       "/users/register":{
+          "post":{
+             "tags":[
+                "Onboarding"
+             ],
+             "summary":"Saves the user in the database",
+             "requestBody":{
+                "description":"Create a new user with role",
+                "content":{
+                   "application/json":{
+                      "schema":{
+                         "$ref":"#/components/schemas/RegisterUser"
+                      }
+                   }
+                },
+                "required":true
+             },
+             "responses":{
+                "200":{
+                   "description":"Returns newly created user",
+                   "content":{
+                      "application/json":{
+                         "schema":{
+                            "$ref":"#/components/schemas/RegisterUserResponse"
+                         }
+                      }
+                   }
+                }
+             }
+          }
+       },
+       "/users/login": {
+         "post": {
+           "tags": [
+             "Onboarding"
+           ],
+           "summary": "Logs in the user",
+           "requestBody": {
+             "description": "Login with email and password",
+             "required": true,
+             "content": {
+               "application/json": {
+                 "schema": {
+                   "$ref": "#/components/schemas/LoginUser"
+                 }
+               }
+             }
+           },
+           "responses": {
+             "200": {
+               "description": "Returns user information",
+               "content": {
+                 "application/json": {
+                   "schema": {
+                     "$ref": "#/components/schemas/LoginUserResponse"
+                   }
+                 }
+               }
+             }
+           }
+         }
+       }
+    },
+    "components":{
+       "schemas":{
+          "RegisterUser":{
+             "type":"object",
+             "properties":{
+                "email": {
+                   "type":"string"
+                },
+                "password": {
+                   "type":"string"
+                },
+                "role": {
+                   "type":"integer",
+                   "minimum":1,
+                   "maximum":4
+                },
+                "name": {
+                    "type":"string"
+                }             
+            },
+             "required":[
+              "email",
+              "password"
+             ]
+          },
+          "RegisterUserResponse":{
+             "type":"object",
+             "properties":{
+                "email": {
+                    "type":"string"
+                 },
+                 "password": {
+                    "type":"string"
+                 },
+                 "role": {
+                    "type":"integer",
+                    "minimum":1,
+                    "maximum":4
+                 },
+                 "name": {
+                     "type":"string"
+                 }             
+             },
+             "required":[ ]
+          },
+          "LoginUser": {
+            "type": "object",
+            "properties": {
+              "email": {
+                "type": "string"
+              },
+              "password": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "email",
+              "password"
+            ]
+          },
+          "LoginUserResponse": {
+            "type": "object",
+            "properties": {
+              "email": {
+                "type": "string"
+              },
+              "role": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 4
+              },
+              "name": {
+                "type": "string"
+              },
+              "accessToken": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "email",
+              "role",
+              "name",
+              "accessToken"
+            ]
+         }
+      }
+    }
+  }
