@@ -21,6 +21,12 @@ services:
     restart: unless-stopped
     ports:
       - 3000:3000
+    environment:
+      ACCESS_TOKEN_SECRET: "281b735919c2587f78a8d3e4d030a35207bf6d5d22f8bd0c1928c9bd411540d6952e34b00374054f0ebb61a8f17ec8adf69df71e14bc5b10c519af36dc42ca57"
+      REFRESH_TOKEN_SECRET: "c6dab470863742b04ad10cf5686ffde17004e39d5b05acad2d676fa9a71e513160c7146dd1f82cf206dee21634deed13157b11b51ab276e5e4311ef51b5da8d5"
+      NODEMAILER_AUTH_USER: "usama.aslam.dev@gmail.com"
+      NODEMAILER_AUTH_PASS: "ubgc ksvl rnzw ibka"
+      Client_Root_URL: "localhost:3001"
     depends_on:
       - postgresql_server
     networks:
