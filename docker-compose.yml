@@ -26,7 +26,7 @@ services:
       REFRESH_TOKEN_SECRET: "c6dab470863742b04ad10cf5686ffde17004e39d5b05acad2d676fa9a71e513160c7146dd1f82cf206dee21634deed13157b11b51ab276e5e4311ef51b5da8d5"
       NODEMAILER_AUTH_USER: "usama.aslam.dev@gmail.com"
       NODEMAILER_AUTH_PASS: "ubgc ksvl rnzw ibka"
-      Client_Root_URL: "localhost:3001"
+      Client_Root_URL: "http://44.235.84.229:3001/"
     depends_on:
       - postgresql_server
     networks:
